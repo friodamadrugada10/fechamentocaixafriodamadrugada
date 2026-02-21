@@ -1,125 +1,99 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fechamento de Caixa - Frio da Madrugada</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-body{
-background:#0d0d0d;
-color:white;
-font-family:Arial;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
-
-.card{
-background:#1a1a1a;
-padding:30px;
-border-radius:15px;
-width:350px;
-box-shadow:0 0 30px orange;
-}
-
-input, select{
-width:100%;
-padding:10px;
-margin-bottom:10px;
-border:none;
-border-radius:8px;
-}
-
-button{
-width:100%;
-padding:12px;
-background:orange;
-border:none;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-}
-
-button:hover{
-background:#ff8800;
-}
-</style>
-</head>
-<body>
-
-<div class="card">
-<h2>FRIO DA MADRUGADA</h2>
-<h3>Novo Fechamento</h3>
-
-<input type="date" id="data">
-
-<select id="turno">
-<option>Manhã</option>
-<option>Noite</option>
-</select>
-
-<input type="text" placeholder="Caixa Inicial" id="caixa_inicial">
-<input type="text" placeholder="Dinheiro" id="dinheiro">
-<input type="text" placeholder="Pix" id="pix">
-<input type="text" placeholder="Débito" id="debito">
-<input type="text" placeholder="Crédito" id="credito">
-<input type="text" placeholder="iFood" id="ifood">
-<input type="text" placeholder="Retiradas" id="retiradas">
-<input type="text" placeholder="Suprimento" id="suprimento">
-<input type="text" placeholder="Caixa Final" id="caixa_final">
-
-<button id="btnSalvar">Salvar Fechamento</button>
-
-</div>
-
 <script>
-const sb = window.supabase.createClient(
-"https://qzelobrvpitgvkuujwzi.supabase.co",
-"sb_publishable_bQSqBS9RQeaySWKneAKHNA_CeOSf93U"
+const supabase = window.supabase.createClient(
+  "https://qzelobrvpitgvkuujwzi.supabase.co",
+  "SUA_CHAVE_PUBLICA_AQUI"
 );
 
-function valor(id){
-const v = document.getElementById(id).value.replace(",", ".");
-return v ? parseFloat(v) : 0;
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  const { data: { user } } = await supabase.auth.getUser();
 
-document.getElementById("btnSalvar")
-.addEventListener("click", async () => {
-
-console.log("Botão clicado");
-
-const { error } = await sb.from('fechamentos')
-.insert([
-{
-DATA: document.getElementById('data').value,
-TURNO: document.getElementById('turno').value,
-CAIXA_INICIO: valor('caixa_inicial'),
-DINHEIRO: valor('dinheiro'),
-PIX: valor('pix'),
-DEBITO: valor('debito'),
-CREDITO: valor('credito'),
-IFOOD: valor('ifood'),
-RETIRADAS: valor('retiradas'),
-SUPRIMENTO: valor('suprimento'),
-CAIXA_FINAL: valor('caixa_final')
-}
-])
-
-if(error){
-console.error(error)
-alert("Erro ao salvar: " + error.message)
-}else{
-alert("Fechamento salvo com sucesso 🔥")
-location.reload()
-}
-
+  if (!user) {
+    mostrarLogin();
+  } else {
+    verificarPerfil(user.id);
+  }
 });
-</script>
 
-</body>
-</html>
+async function verificarPerfil(uid) {
+  const { data, error } = await supabase
+    .from("perfis")
+    .select("role")
+    .eq("id", uid)
+    .single();
+
+  if (error || !data) {
+    alert("Usuário sem perfil definido");
+    return;
+  }
+
+  if (data.role === "admin") {
+    mostrarAdmin();
+  } else if (data.role === "caixa") {
+    mostrarCaixa();
+  }
+}
+
+function mostrarLogin() {
+  document.body.innerHTML = `
+    <div class="card">
+      <h2>Login</h2>
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="senha" placeholder="Senha">
+      <button onclick="login()">Entrar</button>
+    </div>
+  `;
+}
+
+async function login() {
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password: senha
+  });
+
+  if (error) {
+    alert("Erro no login");
+  } else {
+    location.reload();
+  }
+}
+
+function mostrarAdmin() {
+  document.querySelector(".card").innerHTML += `
+    <button onclick="verRelatorios()">Ver Relatórios</button>
+  `;
+}
+
+function mostrarCaixa() {
+  console.log("Usuário é caixa");
+}
+
+async function salvar() {
+  const { error } = await supabase
+    .from('fechamentos')
+    .insert([
+      {
+        DATA: document.getElementById('data').value,
+        TURNO: document.getElementById('turno').value,
+        CAIXA_INICIO: parseFloat(document.getElementById('caixa_inicial').value),
+        DINHEIRO: parseFloat(document.getElementById('dinheiro').value),
+        PIX: parseFloat(document.getElementById('pix').value),
+        DEBITO: parseFloat(document.getElementById('debito').value),
+        CREDITO: parseFloat(document.getElementById('credito').value),
+        IFOOD: parseFloat(document.getElementById('ifood').value),
+        RETIRADAS: parseFloat(document.getElementById('retiradas').value),
+        SUPRIMENTO: parseFloat(document.getElementById('suprimento').value),
+        CAIXA_FINAL: parseFloat(document.getElementById('caixa_final').value)
+      }
+    ])
+
+  if (error) {
+    alert("Erro ao salvar");
+  } else {
+    alert("Fechamento salvo com sucesso 🔥");
+    location.reload();
+  }
+}
+</script>
