@@ -63,17 +63,17 @@ background:#ff8800;
 <option>Noite</option>
 </select>
 
-<input type="number" step="0.01" placeholder="Caixa Inicial" id="caixa_inicial">
-<input type="number" step="0.01" placeholder="Dinheiro" id="dinheiro">
-<input type="number" step="0.01" placeholder="Pix" id="pix">
-<input type="number" step="0.01" placeholder="Débito" id="debito">
-<input type="number" step="0.01" placeholder="Crédito" id="credito">
-<input type="number" step="0.01" placeholder="iFood" id="ifood">
-<input type="number" step="0.01" placeholder="Retiradas" id="retiradas">
-<input type="number" step="0.01" placeholder="Suprimento" id="suprimento">
-<input type="number" step="0.01" placeholder="Caixa Final" id="caixa_final">
+<input type="text" placeholder="Caixa Inicial" id="caixa_inicial">
+<input type="text" placeholder="Dinheiro" id="dinheiro">
+<input type="text" placeholder="Pix" id="pix">
+<input type="text" placeholder="Débito" id="debito">
+<input type="text" placeholder="Crédito" id="credito">
+<input type="text" placeholder="iFood" id="ifood">
+<input type="text" placeholder="Retiradas" id="retiradas">
+<input type="text" placeholder="Suprimento" id="suprimento">
+<input type="text" placeholder="Caixa Final" id="caixa_final">
 
-<button onclick="salvar()">Salvar Fechamento</button>
+<button id="btnSalvar">Salvar Fechamento</button>
 
 </div>
 
@@ -83,7 +83,15 @@ const supabase = window.supabase.createClient(
 "sb_publishable_bQSqBS9RQeaySWKneAKHNA_CeOSf93U"
 );
 
-async function salvar(){
+function valor(id){
+const v = document.getElementById(id).value.replace(",", ".");
+return v ? parseFloat(v) : 0;
+}
+
+document.getElementById("btnSalvar")
+.addEventListener("click", async () => {
+
+console.log("Botão clicado");
 
 const { error } = await supabase
 .from('fechamentos')
@@ -91,26 +99,27 @@ const { error } = await supabase
 {
 DATA: document.getElementById('data').value,
 TURNO: document.getElementById('turno').value,
-CAIXA_INICIO: parseFloat(document.getElementById('caixa_inicial').value),
-DINHEIRO: parseFloat(document.getElementById('dinheiro').value),
-PIX: parseFloat(document.getElementById('pix').value),
-DEBITO: parseFloat(document.getElementById('debito').value),
-CREDITO: parseFloat(document.getElementById('credito').value),
-IFOOD: parseFloat(document.getElementById('ifood').value),
-RETIRADAS: parseFloat(document.getElementById('retiradas').value),
-SUPRIMENTO: parseFloat(document.getElementById('suprimento').value),
-CAIXA_FINAL: parseFloat(document.getElementById('caixa_final').value)
+CAIXA_INICIO: valor('caixa_inicial'),
+DINHEIRO: valor('dinheiro'),
+PIX: valor('pix'),
+DEBITO: valor('debito'),
+CREDITO: valor('credito'),
+IFOOD: valor('ifood'),
+RETIRADAS: valor('retiradas'),
+SUPRIMENTO: valor('suprimento'),
+CAIXA_FINAL: valor('caixa_final')
 }
 ])
 
 if(error){
+console.error(error)
 alert("Erro ao salvar: " + error.message)
 }else{
 alert("Fechamento salvo com sucesso 🔥")
 location.reload()
 }
 
-}
+});
 </script>
 
 </body>
