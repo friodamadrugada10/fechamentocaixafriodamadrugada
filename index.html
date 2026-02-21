@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fechamento de Caixa - Frio da Madrugada</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -45,63 +45,22 @@ button{
 </head>
 
 <body>
-<h1 style="color:red">TESTE 123</h1>
-  
-<div class="card" id="container"></div>
+
+<div class="card">
+  <h2>Login</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="senha" placeholder="Senha">
+  <button id="btnLogin">Entrar</button>
+</div>
 
 <script>
+const supabase = window.supabase.createClient(
+  "https://qzelobrvpitgvkuujwzi.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
+);
 
-console.log("JS carregou");
+document.getElementById("btnLogin").addEventListener("click", async function(){
 
-if (!window.supabaseClient) {
-  window.supabaseClient = window.supabase.createClient(
-    "https://qzelobrvpitgvkuujwzi.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
-  );
-}
-
-const sb = window.supabaseClient;
-
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-
-  const supabase = window.supabase.createClient(
-    "https://qzelobrvpitgvkuujwzi.supabase.co",
-    "SUA_CHAVE_AQUI"
-  );
-
-  const container = document.getElementById("container");
-
-  container.innerHTML = `
-    <h2>Login</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="senha" placeholder="Senha">
-    <button id="btnLogin">Entrar</button>
-  `;
-
-  document.getElementById("btnLogin").addEventListener("click", async function(){
-
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password: senha
-    });
-
-    if(error){
-      alert("Erro no login: " + error.message);
-    } else {
-      alert("Login feito!");
-    }
-
-  });
-
-});
-
-</script>
-  
-async function login(){
   const email = document.getElementById("email").value;
   const senha = document.getElementById("senha").value;
 
@@ -113,33 +72,11 @@ async function login(){
   if(error){
     alert("Erro no login: " + error.message);
   } else {
-    alert("Login feito!");
-  }
-}
-
-</script>
-  <script>
-
-async function login(){
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password: senha
-  });
-
-  if(error){
-    alert("Erro no login: " + error.message);
-  } else {
     alert("Login feito com sucesso!");
-
-    console.log("Usuário logado:", data.user);
-
-    // REDIRECIONA PRA UMA PÁGINA NOVA
-    window.location.href = "painel.html";
   }
-}
+
+});
+</script>
 
 </body>
 </html>
