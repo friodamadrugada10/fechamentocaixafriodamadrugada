@@ -129,6 +129,27 @@ function entrar() {
 function mostrarLancamento() {
     document.getElementById("painel").classList.add("hidden");
     document.getElementById("lancamento").classList.remove("hidden");
+
+    // Agora que a tela apareceu, ativa o Enter para pular campos
+    const inputs = document.querySelectorAll("#lancamento input, #lancamento select");
+
+    inputs.forEach((input, index) => {
+        input.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const next = inputs[index + 1];
+                if (next) {
+                    next.focus();
+                }
+            }
+        });
+    });
+
+    // Foca automaticamente no primeiro campo
+    if (inputs.length > 0) {
+        inputs[0].focus();
+    }
+}
 }
 
 function voltar() {
@@ -160,20 +181,7 @@ function salvar() {
 function logout() {
     location.reload();
 }
-    // Faz o Enter pular para o próximo campo
-const inputs = document.querySelectorAll("#lancamento input, #lancamento select");
-
-inputs.forEach((input, index) => {
-    input.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            const next = inputs[index + 1];
-            if (next) {
-                next.focus();
-            }
-        }
-    });
-});
+  
 </script>
 
 </body>
