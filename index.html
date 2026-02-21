@@ -89,17 +89,17 @@ const { error } = await supabase
 .from('fechamentos')
 .insert([
 {
-data: document.getElementById('data').value,
-turno: document.getElementById('turno').value,
-caixa_inicial: parseFloat(document.getElementById('caixa_inicial').value),
-dinheiro: parseFloat(document.getElementById('dinheiro').value),
-pix: parseFloat(document.getElementById('pix').value),
-debito: parseFloat(document.getElementById('debito').value),
-credito: parseFloat(document.getElementById('credito').value),
-ifood: parseFloat(document.getElementById('ifood').value),
-retiradas: parseFloat(document.getElementById('retiradas').value),
-suprimento: parseFloat(document.getElementById('suprimento').value),
-caixa_final: parseFloat(document.getElementById('caixa_final').value)
+DATA: document.getElementById('data').value,
+TURNO: document.getElementById('turno').value,
+CAIXA_INICIO: parseFloat(document.getElementById('caixa_inicial').value),
+DINHEIRO: parseFloat(document.getElementById('dinheiro').value),
+PIX: parseFloat(document.getElementById('pix').value),
+DEBITO: parseFloat(document.getElementById('debito').value),
+CREDITO: parseFloat(document.getElementById('credito').value),
+IFOOD: parseFloat(document.getElementById('ifood').value),
+RETIRADAS: parseFloat(document.getElementById('retiradas').value),
+SUPRIMENTO: parseFloat(document.getElementById('suprimento').value),
+CAIXA_FINAL: parseFloat(document.getElementById('caixa_final').value)
 }
 ])
 
