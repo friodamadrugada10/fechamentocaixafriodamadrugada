@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fechamento de Caixa - Frio da Madrugada</title>
+<title>Painel - Frio da Madrugada</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -12,81 +12,104 @@ body{
   background:#0d0d0d;
   color:white;
   font-family:Arial;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
   margin:0;
+  padding:40px;
 }
-.card{
+
+h1{
+  color:orange;
+}
+
+.box{
   background:#1a1a1a;
-  padding:30px;
-  border-radius:15px;
-  width:350px;
-  box-shadow:0 0 30px orange;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 0 20px rgba(255,140,0,0.4);
 }
-input{
-  width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  border:none;
-  border-radius:8px;
-}
+
 button{
-  width:100%;
-  padding:12px;
+  padding:10px 15px;
   background:orange;
   border:none;
   border-radius:8px;
   font-weight:bold;
   cursor:pointer;
 }
+
+.hidden{
+  display:none;
+}
 </style>
 </head>
 
 <body>
 
-<div class="card">
-  <h2>Login</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="senha" placeholder="Senha">
-  <button id="btnLogin">Entrar</button>
+<h1>🔥 Painel Frio da Madrugada</h1>
+<p id="usuarioInfo"></p>
+
+<div id="areaAdmin" class="box hidden">
+  <h2>📊 Área Admin</h2>
+  <p>Visualizar relatórios</p>
+  <p>Ver todos os fechamentos</p>
 </div>
+
+<div id="areaCaixa" class="box hidden">
+  <h2>💰 Área Caixa</h2>
+  <p>Inserir novo fechamento</p>
+</div>
+
+<button onclick="logout()">Sair</button>
 
 <script>
 
-// ⚠️ DECLARA APENAS UMA VEZ
-const supabaseClient = window.supabase.createClient(
+const supabase = window.supabase.createClient(
   "https://qzelobrvpitgvkuujwzi.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
 );
 
-document.getElementById("btnLogin").addEventListener("click", async function(){
+async function iniciarPainel(){
 
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+  const { data: { user } } = await supabase.auth.getUser();
 
-  try {
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: senha
-    });
-
-    if(error){
-  alert("Erro no login: " + error.message);
-  return;
-}
-
-alert("Login feito com sucesso!");
-window.location.href = "painel.html";
-
-  } catch (err) {
-    alert("Erro inesperado");
-    console.log(err);
+  if(!user){
+    window.location.href = "index.html";
+    return;
   }
 
-});
+  // 🔥 AQUI MUDAMOS PARA "perfis"
+  const { data: perfil, error } = await supabase
+    .from("perfis")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if(error){
+    alert("Erro ao buscar perfil");
+    console.log(error);
+    return;
+  }
+
+  document.getElementById("usuarioInfo").innerText =
+    "Logado como: " + user.email + " | Tipo: " + perfil.role;
+
+  if(perfil.role === "admin"){
+    document.getElementById("areaAdmin").classList.remove("hidden");
+    document.getElementById("areaCaixa").classList.remove("hidden");
+  }
+
+  if(perfil.role === "caixa"){
+    document.getElementById("areaCaixa").classList.remove("hidden");
+  }
+
+}
+
+async function logout(){
+  await supabase.auth.signOut();
+  window.location.href = "index.html";
+}
+
+iniciarPainel();
 
 </script>
 
