@@ -55,7 +55,8 @@ button{
 
 <script>
 
-const supabase = window.supabase.createClient(
+// ⚠️ DECLARA APENAS UMA VEZ
+const supabaseClient = window.supabase.createClient(
   "https://qzelobrvpitgvkuujwzi.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
 );
@@ -67,7 +68,7 @@ document.getElementById("btnLogin").addEventListener("click", async function(){
 
   try {
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: email,
       password: senha
     });
