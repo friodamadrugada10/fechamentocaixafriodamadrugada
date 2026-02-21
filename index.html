@@ -60,7 +60,9 @@ const supabase = window.supabase.createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
 );
 
-document.getElementById("btnLogin").addEventListener("click", async function(){
+document.getElementById("btnLogin").addEventListener("click", function(){
+  alert("BOTÃO FUNCIONA");
+});
 
   const email = document.getElementById("email").value;
   const senha = document.getElementById("senha").value;
