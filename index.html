@@ -61,13 +61,24 @@ if (!window.supabaseClient) {
 
 const sb = window.supabaseClient;
 
-document.getElementById("container").innerHTML = `
-  <h2>Login</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="senha" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-`;
-document.getElementById("btnLogin").addEventListener("click", login);
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+  document.getElementById("container").innerHTML = `
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="senha" placeholder="Senha">
+    <button id="btnLogin">Entrar</button>
+  `;
+
+  document.getElementById("btnLogin").addEventListener("click", function(){
+    alert("CLICOU");
+  });
+
+});
+
+</script>
   
 async function login(){
   const email = document.getElementById("email").value;
