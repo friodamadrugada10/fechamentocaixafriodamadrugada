@@ -67,7 +67,8 @@ document.getElementById("container").innerHTML = `
   <input type="password" id="senha" placeholder="Senha">
   <button onclick="login()">Entrar</button>
 `;
-
+document.getElementById("btnLogin").addEventListener("click", login);
+  
 async function login(){
   const email = document.getElementById("email").value;
   const senha = document.getElementById("senha").value;
