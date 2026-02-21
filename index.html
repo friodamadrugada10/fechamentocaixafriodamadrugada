@@ -78,7 +78,7 @@ background:#ff8800;
 </div>
 
 <script>
-const supabase = window.supabase.createClient(
+const sb = window.supabase.createClient(
 "https://qzelobrvpitgvkuujwzi.supabase.co",
 "sb_publishable_bQSqBS9RQeaySWKneAKHNA_CeOSf93U"
 );
@@ -93,8 +93,7 @@ document.getElementById("btnSalvar")
 
 console.log("Botão clicado");
 
-const { error } = await supabase
-.from('fechamentos')
+const { error } = await sb.from('fechamentos')
 .insert([
 {
 DATA: document.getElementById('data').value,
