@@ -74,12 +74,12 @@ document.getElementById("btnLogin").addEventListener("click", async function(){
     });
 
     if(error){
-      alert("Erro no login: " + error.message);
-      return;
-    }
+  alert("Erro no login: " + error.message);
+  return;
+}
 
-    alert("Login feito com sucesso!");
-    console.log("Usuário:", data.user);
+alert("Login feito com sucesso!");
+window.location.href = "painel.html";
 
   } catch (err) {
     alert("Erro inesperado");
