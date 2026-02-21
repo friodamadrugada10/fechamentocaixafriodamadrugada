@@ -27,7 +27,7 @@ h1 {
     text-align: center;
     color: #ff7a00;
 }
-input, select, button {
+input, button {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
@@ -43,20 +43,60 @@ button {
 button:hover {
     background: #ff5500;
 }
+.hidden {
+    display: none;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="container" id="loginBox">
 <h1>FRIO DA MADRUGADA</h1>
 <p>Fechamento de Caixa</p>
 
-<input type="text" placeholder="Usuário">
-<input type="password" placeholder="Senha">
+<input type="text" id="usuario" placeholder="Usuário">
+<input type="password" id="senha" placeholder="Senha">
 
-<button>Entrar</button>
+<button onclick="login()">Entrar</button>
+<p id="erro" style="color:red;"></p>
 </div>
+
+<div class="container hidden" id="painel">
+<h1>Painel</h1>
+<p id="tipoUsuario"></p>
+<button onclick="logout()">Sair</button>
+</div>
+
+<script>
+function login() {
+    const usuario = document.getElementById("usuario").value;
+    const senha = document.getElementById("senha").value;
+
+    if (usuario === "alexandre" && senha === "1234") {
+        entrar("Administrador");
+    } 
+    else if (usuario === "jonata" && senha === "1234") {
+        entrar("Administrador");
+    }
+    else if (usuario === "caixa" && senha === "1234") {
+        entrar("Caixa");
+    }
+    else {
+        document.getElementById("erro").innerText = "Usuário ou senha incorretos";
+    }
+}
+
+function entrar(tipo) {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("painel").classList.remove("hidden");
+    document.getElementById("tipoUsuario").innerText = "Perfil: " + tipo;
+}
+
+function logout() {
+    location.reload();
+}
+</script>
 
 </body>
 </html>
