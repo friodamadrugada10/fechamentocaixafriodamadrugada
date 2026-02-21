@@ -137,7 +137,24 @@ function voltar() {
 }
 
 function salvar() {
-    alert("Fechamento salvo (ainda não conectado ao banco)");
+    const caixaInicio = parseFloat(document.getElementById("caixaInicio").value) || 0;
+    const caixaFinal = parseFloat(document.getElementById("caixaFinal").value) || 0;
+    const suprimento = parseFloat(document.getElementById("suprimento").value) || 0;
+    const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
+    const pix = parseFloat(document.getElementById("pix").value) || 0;
+    const debito = parseFloat(document.getElementById("debito").value) || 0;
+    const credito = parseFloat(document.getElementById("credito").value) || 0;
+    const ifood = parseFloat(document.getElementById("ifood").value) || 0;
+    const retiradas = parseFloat(document.getElementById("retiradas").value) || 0;
+
+    const totalVendas = dinheiro + pix + debito + credito + ifood;
+    const totalEsperado = caixaInicio + dinheiro - retiradas + suprimento;
+    const diferenca = caixaFinal - totalEsperado;
+
+    alert(
+        "Total Vendas: R$ " + totalVendas.toFixed(2) +
+        "\nDiferença: R$ " + diferenca.toFixed(2)
+    );
 }
 
 function logout() {
