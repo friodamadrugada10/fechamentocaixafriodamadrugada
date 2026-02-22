@@ -3,92 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frio da Madrugada</title>
+<title>Login - Frio da Madrugada</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
-  margin:0;
   background:#0d0d0d;
-  font-family:Arial;
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
-}
-
-.phone{
-  width:390px;
-  height:800px;
-  background:#121212;
-  border-radius:40px;
-  padding:25px;
-  box-shadow:0 0 60px rgba(255,120,0,0.6);
-  overflow-y:auto;
-  color:white;
-}
-
-h1{
-  color:orange;
-  text-align:center;
+  margin:0;
+  font-family:Arial;
 }
 
 .card{
   background:#1a1a1a;
-  padding:15px;
-  border-radius:15px;
-  margin-bottom:15px;
-  box-shadow:0 0 15px rgba(255,140,0,0.4);
+  padding:30px;
+  border-radius:20px;
+  width:350px;
+  box-shadow:0 0 40px rgba(255,120,0,0.6);
+  color:white;
 }
 
 input{
   width:100%;
-  padding:10px;
-  margin-bottom:10px;
+  padding:12px;
+  margin-bottom:12px;
   border:none;
   border-radius:8px;
 }
 
 button{
   width:100%;
-  padding:12px;
+  padding:14px;
   background:orange;
   border:none;
   border-radius:10px;
   font-weight:bold;
   cursor:pointer;
 }
-
-.lista{
-  font-size:14px;
-  margin-top:10px;
-}
 </style>
 </head>
 
 <body>
 
-<div class="phone">
-
-<h1>🔥 Frio da Madrugada</h1>
-
 <div class="card">
-  <h3>Novo Fechamento</h3>
-  <input type="number" id="dinheiro" placeholder="Dinheiro">
-  <input type="number" id="pix" placeholder="Pix">
-  <input type="number" id="debito" placeholder="Débito">
-  <input type="number" id="credito" placeholder="Crédito">
-  <button id="salvarBtn">Salvar</button>
-</div>
-
-<div class="card">
-  <h3>Relatórios</h3>
-  <div id="listaFechamentos" class="lista"></div>
-</div>
-
-<button id="logoutBtn">Sair</button>
-
+  <h2>🔥 Frio da Madrugada</h2>
+  <input type="email" id="email" placeholder="E-mail">
+  <input type="password" id="senha" placeholder="Senha">
+  <button id="loginBtn">Entrar</button>
 </div>
 
 <script>
@@ -98,62 +63,23 @@ const supabase = window.supabase.createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
 );
 
-async function verificarLogin(){
-  const { data: { user } } = await supabase.auth.getUser();
-  if(!user){
-    window.location.href = "index.html";
-  }
-}
+document.getElementById("loginBtn").addEventListener("click", async () => {
 
-async function salvarFechamento(){
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
 
-  const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
-  const pix = parseFloat(document.getElementById("pix").value) || 0;
-  const debito = parseFloat(document.getElementById("debito").value) || 0;
-  const credito = parseFloat(document.getElementById("credito").value) || 0;
-
-  await supabase.from("fechamentos").insert([{
-    dinheiro,
-    pix,
-    debito,
-    credito,
-    data: new Date()
-  }]);
-
-  alert("Fechamento salvo 🔥");
-  carregarRelatorios();
-}
-
-async function carregarRelatorios(){
-
-  const { data } = await supabase
-    .from("fechamentos")
-    .select("*")
-    .order("data", { ascending: false });
-
-  const lista = document.getElementById("listaFechamentos");
-  lista.innerHTML = "";
-
-  data.forEach(item => {
-    lista.innerHTML += `
-      <div>
-        💰 ${item.dinheiro} | 💳 ${item.pix} | 🏦 ${item.debito} | 🧾 ${item.credito}
-      </div>
-    `;
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: senha
   });
 
-}
+  if(error){
+    alert("Erro: " + error.message);
+  } else {
+    window.location.href = "painel.html";
+  }
 
-async function logout(){
-  await supabase.auth.signOut();
-  window.location.href = "index.html";
-}
-
-document.getElementById("salvarBtn").addEventListener("click", salvarFechamento);
-document.getElementById("logoutBtn").addEventListener("click", logout);
-
-verificarLogin();
-carregarRelatorios();
+});
 
 </script>
 
