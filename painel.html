@@ -21,6 +21,8 @@
   <button id="logoutBtn">Sair</button>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 window.addEventListener("DOMContentLoaded", async () => {
 
@@ -36,20 +38,48 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
   );
 
-  // 🔐 Proteção da página
+  // 🔐 Proteção
   const { data } = await client.auth.getSession();
-
   if (!data.session) {
     window.location.href = "index.html";
     return;
   }
 
-  // 🚪 Logout
-  const logoutBtn = document.getElementById("logoutBtn");
+  // 🔥 BOTÃO SALVAR
+  const salvarBtn = document.getElementById("salvarFechamento");
 
-  logoutBtn.addEventListener("click", async () => {
-    await client.auth.signOut();
-    window.location.href = "index.html";
+  salvarBtn.addEventListener("click", async () => {
+
+    alert("Botão funcionando 🔥"); // teste
+
+    const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
+    const pix = parseFloat(document.getElementById("pix").value) || 0;
+    const debito = parseFloat(document.getElementById("debito").value) || 0;
+    const credito = parseFloat(document.getElementById("credito").value) || 0;
+    const ifood = parseFloat(document.getElementById("ifood").value) || 0;
+    const caixa_inicio = parseFloat(document.getElementById("caixa_inicio").value) || 0;
+
+    const total_vendas = dinheiro + pix + debito + credito + ifood;
+    const total_faturado = total_vendas - caixa_inicio;
+
+    const { error } = await client.from("fechamentos").insert([{
+      dinheiro,
+      pix,
+      debito,
+      credito,
+      ifood,
+      caixa_inicio,
+      total_vendas,
+      total_faturado,
+      data: new Date()
+    }]);
+
+    if(error){
+      alert("Erro: " + error.message);
+    } else {
+      alert("Fechamento salvo com sucesso 🔥");
+    }
+
   });
 
 });
