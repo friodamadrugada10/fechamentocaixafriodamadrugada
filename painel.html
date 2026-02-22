@@ -8,13 +8,13 @@
   <div style="margin-top:30px;">
   <h3>Novo Fechamento</h3>
 
-  <input type="number" id="caixa_inicio" placeholder="Caixa Início">
-<input type="number" id="dinheiro" placeholder="Dinheiro">
-<input type="number" id="pix" placeholder="PIX">
-<input type="number" id="debito" placeholder="Débito">
-<input type="number" id="credito" placeholder="Crédito">
-<input type="number" id="ifood" placeholder="iFood">
-<input type="number" id="retiradas" placeholder="Retiradas">
+  <input type="number" id="CAIXA_INICIO" placeholder="Caixa Início">
+<input type="number" id="DINHEIRO" placeholder="Dinheiro">
+<input type="number" id="PIX" placeholder="PIX">
+<input type="number" id="DEBITO" placeholder="Débito">
+<input type="number" id="CREDITO" placeholder="Crédito">
+<input type="number" id="IFOOD" placeholder="iFood">
+<input type="number" id="RETIRADAS" placeholder="Retiradas">
 
   <button id="salvarFechamento">Salvar Fechamento</button>
 </div>
@@ -39,7 +39,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   );
 
   // 🔐 Proteção
-  const { data } = await client.auth.getSession();
+  const { DATA } = await client.auth.getSession();
   if (!data.session) {
     window.location.href = "index.html";
     return;
@@ -52,26 +52,26 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     alert("Botão funcionando 🔥"); // teste
 
-    const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
-    const pix = parseFloat(document.getElementById("pix").value) || 0;
-    const debito = parseFloat(document.getElementById("debito").value) || 0;
-    const credito = parseFloat(document.getElementById("credito").value) || 0;
-    const ifood = parseFloat(document.getElementById("ifood").value) || 0;
-    const caixa_inicio = parseFloat(document.getElementById("caixa_inicio").value) || 0;
+    const DINHEIRO = parseFloat(document.getElementById("dinheiro").value) || 0;
+    const PIX = parseFloat(document.getElementById("pix").value) || 0;
+    const DEBITO = parseFloat(document.getElementById("debito").value) || 0;
+    const CREDITO = parseFloat(document.getElementById("credito").value) || 0;
+    const IFOOD = parseFloat(document.getElementById("ifood").value) || 0;
+    const CAIXA_INIXIO = parseFloat(document.getElementById("caixa_inicio").value) || 0;
 
     const total_vendas = dinheiro + pix + debito + credito + ifood;
     const total_faturado = total_vendas - caixa_inicio;
 
     const { error } = await client.from("fechamentos").insert([{
-      dinheiro,
-      pix,
-      debito,
-      credito,
-      ifood,
-      caixa_inicio,
-      total_vendas,
-      total_faturado,
-      data: new Date()
+      DINHEIRO,
+      PIX,
+      DEBITO,
+      CREDITO,
+      IFOOD,
+      CAIXA_INICIO,
+      TOTAL_VENDAS,
+      TOTAL_FATURADO,
+      DATA: new Date()
     }]);
 
     if(error){
