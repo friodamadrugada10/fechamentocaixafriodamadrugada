@@ -17,7 +17,6 @@ body{
   margin:0;
   font-family:Arial;
 }
-
 .card{
   background:#1a1a1a;
   padding:30px;
@@ -26,7 +25,6 @@ body{
   box-shadow:0 0 40px rgba(255,120,0,0.6);
   color:white;
 }
-
 input{
   width:100%;
   padding:12px;
@@ -34,7 +32,6 @@ input{
   border:none;
   border-radius:8px;
 }
-
 button{
   width:100%;
   padding:14px;
@@ -57,39 +54,11 @@ button{
 </div>
 
 <script>
-
-const supabase = window.supabase.createClient(
-  "https://qzelobrvpitgvkuujwzi.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
-);
-
-document.getElementById("loginBtn").addEventListener("click", async () => {
-
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: senha
-  });
-
-  if(error){
-    alert("Erro: " + error.message);
-  } else {
-    window.location.href = "painel.html";
-  }
-
-});
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
 window.addEventListener("DOMContentLoaded", () => {
 
   const client = window.supabase.createClient(
     "https://qzelobrvpitgvkuujwzi.supabase.co",
-    "SUA_CHAVE_PUBLICA_AQUI"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
   );
 
   const btn = document.getElementById("loginBtn");
@@ -100,19 +69,20 @@ window.addEventListener("DOMContentLoaded", () => {
     const senha = document.getElementById("senha").value;
 
     const { error } = await client.auth.signInWithPassword({
-      email: email,
+      email,
       password: senha
     });
 
     if(error){
       alert("Erro: " + error.message);
     } else {
-      alert("Login realizado!");
+      window.location.href = "painel.html";
     }
 
   });
 
 });
 </script>
+
 </body>
 </html>
