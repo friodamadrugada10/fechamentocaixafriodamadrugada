@@ -5,6 +5,7 @@
 </head>
 <body style="background:black;color:white;text-align:center;margin-top:100px;">
 <h1>Bem-vindo ao Painel 🔥</h1>
+  <button id="logoutBtn">Sair</button>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -12,14 +13,31 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const client = window.supabase.createClient(
     "https://qzelobrvpitgvkuujwzi.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI""
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI",
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
   );
 
-  const { data: { user } } = await client.auth.getUser();
+  // 🔐 Proteção da página
+  const { data } = await client.auth.getSession();
 
-  if (!user) {
+  if (!data.session) {
     window.location.href = "index.html";
+    return;
   }
+
+  // 🚪 Logout
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  logoutBtn.addEventListener("click", async () => {
+    await client.auth.signOut();
+    window.location.href = "index.html";
+  });
 
 });
 </script>
