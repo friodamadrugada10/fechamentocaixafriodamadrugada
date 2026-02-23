@@ -8,14 +8,6 @@
   <div style="margin-top:30px;">
   <h3>Novo Fechamento</h3>
 
-  <const hoje = new Date().toISOString().split("T")[0];>
-const CAIXA_INICIO = parseFloat(document.getElementById("CAIXA_INICIO").value) || 0;
-const DINHEIRO = parseFloat(document.getElementById("DINHEIRO").value) || 0;
-const PIX = parseFloat(document.getElementById("PIX").value) || 0;
-const DEBITO = parseFloat(document.getElementById("DEBITO").value) || 0;
-const CREDITO = parseFloat(document.getElementById("CREDITO").value) || 0;
-const IFOOD = parseFloat(document.getElementById("IFOOD").value) || 0;
-const RETIRADAS = parseFloat(document.getElementById("RETIRADAS").value) || 0;
 
   <button type="button" onclick="salvarFechamento()">Salvar Fechamento</button>
 </div>
@@ -52,15 +44,15 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     alert("Botão funcionando 🔥"); // teste
 
-    const DINHEIRO = parseFloat(document.getElementById("dinheiro").value) || 0;
-    const PIX = parseFloat(document.getElementById("pix").value) || 0;
-    const DEBITO = parseFloat(document.getElementById("debito").value) || 0;
-    const CREDITO = parseFloat(document.getElementById("credito").value) || 0;
-    const IFOOD = parseFloat(document.getElementById("ifood").value) || 0;
-    const CAIXA_INIXIO = parseFloat(document.getElementById("caixa_inicio").value) || 0;
+    const DINHEIRO = parseFloat(document.getElementById("DINHEIRO").value) || 0;
+    const PIX = parseFloat(document.getElementById("PIX").value) || 0;
+    const DEBITO = parseFloat(document.getElementById("DEBITO").value) || 0;
+    const CREDITO = parseFloat(document.getElementById("CREDITO").value) || 0;
+    const IFOOD = parseFloat(document.getElementById("IFOOD").value) || 0;
+    const CAIXA_INIXIO = parseFloat(document.getElementById("CAIXA_INICIO").value) || 0;
 
-    const total_vendas = dinheiro + pix + debito + credito + ifood;
-    const total_faturado = total_vendas - caixa_inicio;
+    const total_vendas = DINHEIRO + PIX + DEBITO + CREDITO + IFOOD;
+    const total_faturado = TOTAL_VENDAS - CAIXA_INICIO;
 
     const { error } = await client.from("fechamentos").insert([{
       DINHEIRO,
