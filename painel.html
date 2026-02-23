@@ -1,83 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Painel</title>
+  <title>Painel - Frio da Madrugada</title>
 </head>
-<body style="background:black;color:white;text-align:center;margin-top:100px;">
+
+<body style="background:black;color:white;text-align:center;margin-top:60px;">
+
 <h1>Bem-vindo ao Painel 🔥</h1>
-  <div style="margin-top:30px;">
+
+<div style="margin-top:30px;">
   <h3>Novo Fechamento</h3>
 
+  <input type="date" id="data"><br><br>
 
-  document.getElementById("salvarFechamento")
-.addEventListener("click", async () => {
-   // código aqui
-});
+  <select id="turno">
+    <option value="Manhã">Manhã</option>
+    <option value="Tarde">Tarde</option>
+    <option value="Noite">Noite</option>
+  </select><br><br>
+
+  <input type="number" id="caixa_inicio" placeholder="Caixa Inicial"><br><br>
+  <input type="number" id="dinheiro" placeholder="Dinheiro"><br><br>
+  <input type="number" id="pix" placeholder="Pix"><br><br>
+  <input type="number" id="debito" placeholder="Débito"><br><br>
+  <input type="number" id="credito" placeholder="Crédito"><br><br>
+  <input type="number" id="ifood" placeholder="iFood"><br><br>
+  <input type="number" id="retiradas" placeholder="Retiradas"><br><br>
+
+  <button id="salvarFechamento">Salvar Fechamento</button>
 </div>
-  <button id="logoutBtn">Sair</button>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<br>
+<button id="logoutBtn">Sair</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+// 🔑 CONEXÃO SUPABASE
+const client = window.supabase.createClient(
+  "https://qzelobrvpitgvkuujwzi.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
+);
+
+// 🔐 PROTEÇÃO + INICIALIZAÇÃO
 window.addEventListener("DOMContentLoaded", async () => {
 
-  const client = window.supabase.createClient(
-    "https://qzelobrvpitgvkuujwzi.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI",
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-      }
-    }
-  );
+  // Definir data de hoje automática
+  document.getElementById("data").value =
+    new Date().toISOString().split("T")[0];
 
-  // 🔐 Proteção
+  // Verificar sessão
   const { data } = await client.auth.getSession();
   if (!data.session) {
     window.location.href = "index.html";
     return;
   }
 
-  // 🔥 BOTÃO SALVAR
-  const salvarBtn = document.getElementById("salvarFechamento");
+  // 🔥 SALVAR FECHAMENTO
+  document.getElementById("salvarFechamento")
+  .addEventListener("click", async () => {
 
-  salvarBtn.addEventListener("click", async () => {
+    const dataFechamento = document.getElementById("data").value;
+    const turno = document.getElementById("turno").value;
 
-    alert("Botão funcionando 🔥"); // teste
+    const caixa_inicio = parseFloat(document.getElementById("caixa_inicio").value) || 0;
+    const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
+    const pix = parseFloat(document.getElementById("pix").value) || 0;
+    const debito = parseFloat(document.getElementById("debito").value) || 0;
+    const credito = parseFloat(document.getElementById("credito").value) || 0;
+    const ifood = parseFloat(document.getElementById("ifood").value) || 0;
+    const retiradas = parseFloat(document.getElementById("retiradas").value) || 0;
 
-    const DINHEIRO = parseFloat(document.getElementById("DINHEIRO").value) || 0;
-    const PIX = parseFloat(document.getElementById("PIX").value) || 0;
-    const DEBITO = parseFloat(document.getElementById("DEBITO").value) || 0;
-    const CREDITO = parseFloat(document.getElementById("CREDITO").value) || 0;
-    const IFOOD = parseFloat(document.getElementById("IFOOD").value) || 0;
-    const CAIXA_INIXIO = parseFloat(document.getElementById("CAIXA_INICIO").value) || 0;
+    // 📊 CÁLCULOS
+    const total_vendas = dinheiro + pix + debito + credito + ifood;
+    const total_faturado = total_vendas - caixa_inicio;
+    const caixa_final = total_faturado - retiradas;
 
-    const total_vendas = DINHEIRO + PIX + DEBITO + CREDITO + IFOOD;
-    const total_faturado = TOTAL_VENDAS - CAIXA_INICIO;
-
-    const { error } = await client.from("fechamentos").insert([{
-      DINHEIRO,
-      PIX,
-      DEBITO,
-      CREDITO,
-      IFOOD,
-      CAIXA_INICIO,
-      TOTAL_VENDAS,
-      TOTAL_FATURADO,
-      DATA: new Date()
-    }]);
+    // 💾 SALVAR NO BANCO
+    const { error } = await client
+      .from("fechamentos")
+      .insert([{
+        data: dataFechamento,
+        turno,
+        caixa_inicio,
+        dinheiro,
+        pix,
+        debito,
+        credito,
+        ifood,
+        retiradas,
+        total_vendas,
+        total_faturado,
+        caixa_final
+      }]);
 
     if(error){
-      alert("Erro: " + error.message);
+      alert("Erro ao salvar: " + error.message);
     } else {
       alert("Fechamento salvo com sucesso 🔥");
     }
 
   });
 
+  // 🚪 LOGOUT
+  document.getElementById("logoutBtn")
+  .addEventListener("click", async () => {
+    await client.auth.signOut();
+    window.location.href = "index.html";
+  });
+
 });
+
 </script>
+
 </body>
 </html>
