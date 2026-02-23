@@ -9,13 +9,13 @@
   <h3>Novo Fechamento</h3>
 
   <const hoje = new Date().toISOString().split("T")[0];>
-  <input type="number" id="caixa_inicio" placeholder="Caixa Início">
-<input type="number" id="dinheiro" placeholder="Dinheiro">
-<input type="number" id="pix" placeholder="PIX">
-<input type="number" id="debito" placeholder="Débito">
-<input type="number" id="credito" placeholder="Crédito">
-<input type="number" id="ifood" placeholder="iFood">
-<input type="number" id="retiradas" placeholder="Retiradas">
+const CAIXA_INICIO = parseFloat(document.getElementById("CAIXA_INICIO").value) || 0;
+const DINHEIRO = parseFloat(document.getElementById("DINHEIRO").value) || 0;
+const PIX = parseFloat(document.getElementById("PIX").value) || 0;
+const DEBITO = parseFloat(document.getElementById("DEBITO").value) || 0;
+const CREDITO = parseFloat(document.getElementById("CREDITO").value) || 0;
+const IFOOD = parseFloat(document.getElementById("IFOOD").value) || 0;
+const RETIRADAS = parseFloat(document.getElementById("RETIRADAS").value) || 0;
 
   <button type="button" onclick="salvarFechamento()">Salvar Fechamento</button>
 </div>
