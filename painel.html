@@ -83,8 +83,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     const total_vendas = dinheiro + pix + debito + credito + ifood;
     const total_faturado = total_vendas - caixa_inicio;
     const caixa_final = parseFloat(document.getElementById("caixa_final").value) || 0;
-<label>Diferença (sobra ou falta)</label>
-<input type="number" id="diferenca" step="0.01" placeholder="Ex: -10.00 ou 5.00">
+    const diferenca = parseFloat(document.getElementById("diferenca").value) || 0;
     
     const { error } = await client
       .from("fechamentos")
