@@ -2,15 +2,14 @@
 <html>
 <head>
   <title>Painel - Frio da Madrugada</title>
-
-  <h2>Resumo do Dia</h2>
-<div id="resumo" style="margin-bottom:40px;"></div>
-  
 </head>
 
 <body style="background:black;color:white;text-align:center;margin-top:60px;">
 
 <h1>Bem-vindo ao Painel 🔥</h1>
+
+<h2>Resumo do Dia</h2>
+<div id="resumo" style="margin-bottom:40px;"></div>
 
 <div style="margin-top:30px;">
   <h3>Novo Fechamento</h3>
@@ -37,17 +36,87 @@
 <br>
 <button id="logoutBtn">Sair</button>
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-// 🔑 CONEXÃO SUPABASE
+// 🔑 CONEXÃO SUPABASE (UMA VEZ SÓ)
 const client = window.supabase.createClient(
   "https://qzelobrvpitgvkuujwzi.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
 );
 
-// ===== FUNÇÃO RESUMO =====
+// 🔐 PROTEÇÃO + INICIALIZAÇÃO
+window.addEventListener("DOMContentLoaded", async () => {
+
+  // Data automática
+  document.getElementById("data").value =
+    new Date().toISOString().split("T")[0];
+
+  // Verificar login
+  const { data } = await client.auth.getSession();
+  if (!data.session) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  carregarResumo();
+
+  // 🔥 SALVAR FECHAMENTO
+  document.getElementById("salvarFechamento")
+  .addEventListener("click", async () => {
+
+    const dataFechamento = document.getElementById("data").value;
+    const turno = document.getElementById("turno").value;
+
+    const caixa_inicio = parseFloat(document.getElementById("caixa_inicio").value) || 0;
+    const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
+    const pix = parseFloat(document.getElementById("pix").value) || 0;
+    const debito = parseFloat(document.getElementById("debito").value) || 0;
+    const credito = parseFloat(document.getElementById("credito").value) || 0;
+    const ifood = parseFloat(document.getElementById("ifood").value) || 0;
+    const retiradas = parseFloat(document.getElementById("retiradas").value) || 0;
+
+    const total_vendas = dinheiro + pix + debito + credito + ifood;
+    const total_faturado = total_vendas - caixa_inicio;
+    const caixa_final = total_faturado - retiradas;
+
+    const { error } = await client
+      .from("fechamentos")
+      .insert([{
+        data: dataFechamento,
+        turno,
+        caixa_inicio,
+        dinheiro,
+        pix,
+        debito,
+        credito,
+        ifood,
+        retiradas,
+        total_vendas,
+        total_faturado,
+        caixa_final
+      }]);
+
+    if(error){
+      alert("Erro ao salvar: " + error.message);
+    } else {
+      alert("Fechamento salvo com sucesso 🔥");
+      carregarResumo();
+    }
+
+  });
+
+  // 🚪 LOGOUT
+  document.getElementById("logoutBtn")
+  .addEventListener("click", async () => {
+    await client.auth.signOut();
+    window.location.href = "index.html";
+  });
+
+});
+
+// 📊 RESUMO DO DIA
 async function carregarResumo() {
   const hoje = new Date().toISOString().split('T')[0];
 
@@ -57,10 +126,7 @@ async function carregarResumo() {
     .gte("created_at", hoje + "T00:00:00")
     .lte("created_at", hoje + "T23:59:59");
 
-  if (error) {
-    console.log(error);
-    return;
-  }
+  if (error) return;
 
   let totalDinheiro = 0;
   let totalPix = 0;
@@ -89,86 +155,6 @@ async function carregarResumo() {
     🔥 Lucro Líquido: <b>R$ ${liquido.toFixed(2)}</b>
   `;
 }
-
-carregarResumo();
-
-</script>
-<script>
-
-// 🔑 CONEXÃO SUPABASE
-const client = window.supabase.createClient(
-  "https://qzelobrvpitgvkuujwzi.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
-);
-
-// 🔐 PROTEÇÃO + INICIALIZAÇÃO
-window.addEventListener("DOMContentLoaded", async () => {
-
-  // Definir data de hoje automática
-  document.getElementById("data").value =
-    new Date().toISOString().split("T")[0];
-
-  // Verificar sessão
-  const { data } = await client.auth.getSession();
-  if (!data.session) {
-    window.location.href = "index.html";
-    return;
-  }
-
-  // 🔥 SALVAR FECHAMENTO
-  document.getElementById("salvarFechamento")
-  .addEventListener("click", async () => {
-
-    const dataFechamento = document.getElementById("data").value;
-    const turno = document.getElementById("turno").value;
-
-    const caixa_inicio = parseFloat(document.getElementById("caixa_inicio").value) || 0;
-    const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
-    const pix = parseFloat(document.getElementById("pix").value) || 0;
-    const debito = parseFloat(document.getElementById("debito").value) || 0;
-    const credito = parseFloat(document.getElementById("credito").value) || 0;
-    const ifood = parseFloat(document.getElementById("ifood").value) || 0;
-    const retiradas = parseFloat(document.getElementById("retiradas").value) || 0;
-
-    // 📊 CÁLCULOS
-    const total_vendas = dinheiro + pix + debito + credito + ifood;
-    const total_faturado = total_vendas - caixa_inicio;
-    const caixa_final = total_faturado - retiradas;
-
-    // 💾 SALVAR NO BANCO
-    const { error } = await client
-      .from("fechamentos")
-      .insert([{
-        data: dataFechamento,
-        turno,
-        caixa_inicio,
-        dinheiro,
-        pix,
-        debito,
-        credito,
-        ifood,
-        retiradas,
-        total_vendas,
-        total_faturado,
-        caixa_final
-      }]);
-
-    if(error){
-      alert("Erro ao salvar: " + error.message);
-    } else {
-      alert("Fechamento salvo com sucesso 🔥");
-    }
-
-  });
-
-  // 🚪 LOGOUT
-  document.getElementById("logoutBtn")
-  .addEventListener("click", async () => {
-    await client.auth.signOut();
-    window.location.href = "index.html";
-  });
-
-});
 
 </script>
 
