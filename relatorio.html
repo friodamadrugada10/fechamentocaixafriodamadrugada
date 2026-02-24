@@ -12,8 +12,7 @@
 
 <select id="turno">
   <option value="Manhã">Manhã</option>
-  <option value="Tarde">Tarde</option>
-  <option value="Noite">Noite</option>
+   <option value="Noite">Noite</option>
 </select><br><br>
 
 <button onclick="buscarRelatorio()">Buscar</button>
@@ -64,7 +63,8 @@ function formatar(valor) {
     currency: "BRL"
   });
 }
- document.getElementById("resultado").innerHTML = `
+  let cor = f.diferenca < 0 ? "red" : "lime";
+document.getElementById("resultado").innerHTML = `
 💵 Dinheiro: ${formatar(f.dinheiro)} <br>
 📲 PIX: ${formatar(f.pix)} <br>
 💳 Débito: ${formatar(f.debito)} <br>
@@ -74,7 +74,10 @@ function formatar(valor) {
 📄 Total Vendas: ${formatar(f.total_vendas)} <br>
 ➖ Retiradas: ${formatar(f.retiradas)} <br><br>
 
-🔥 Caixa Final: ${formatar(f.caixa_final)}
+🔥 Caixa Final: ${formatar(f.caixa_final)} <br>
+⚖️ Diferença: <span style="color:${cor}">
+${formatar(f.diferenca)}
+</span>
 `;
 }
 
