@@ -107,7 +107,6 @@ window.addEventListener("DOMContentLoaded", async () => {
       alert("Erro ao salvar: " + error.message);
     } else {
       alert("Fechamento salvo com sucesso 🔥");
-      carregarResumo();
     }
 
   });
@@ -121,8 +120,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 });
 
-// 📊 RESUMO DO DIA
-async function carregarResumo() {
   const hoje = new Date().toISOString().split('T')[0];
 
   const { data, error } = await client
@@ -150,15 +147,7 @@ async function carregarResumo() {
   const totalGeral = totalDinheiro + totalPix + totalCredito + totalIfood;
   const liquido = totalGeral - totalRetiradas;
 
-  document.getElementById("resumo").innerHTML = `
-    💵 Dinheiro: R$ ${totalDinheiro.toFixed(2)} <br>
-    📲 PIX: R$ ${totalPix.toFixed(2)} <br>
-    💳 Crédito: R$ ${totalCredito.toFixed(2)} <br>
-    🛵 iFood: R$ ${totalIfood.toFixed(2)} <br><br>
-    🧾 Total Geral: <b>R$ ${totalGeral.toFixed(2)}</b> <br>
-    ➖ Retiradas: R$ ${totalRetiradas.toFixed(2)} <br><br>
-    🔥 Lucro Líquido: <b>R$ ${liquido.toFixed(2)}</b>
-  `;
+  
 }
 
 </script>
