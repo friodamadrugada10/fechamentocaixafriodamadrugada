@@ -2,6 +2,10 @@
 <html>
 <head>
   <title>Painel - Frio da Madrugada</title>
+
+  <h2>Resumo do Dia</h2>
+<div id="resumo" style="margin-bottom:40px;"></div>
+  
 </head>
 
 <body style="background:black;color:white;text-align:center;margin-top:60px;">
@@ -33,8 +37,62 @@
 <br>
 <button id="logoutBtn">Sair</button>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+
+// 🔑 CONEXÃO SUPABASE
+const client = window.supabase.createClient(
+  "https://qzelobrvpitgvkuujwzi.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
+);
+
+// ===== FUNÇÃO RESUMO =====
+async function carregarResumo() {
+  const hoje = new Date().toISOString().split('T')[0];
+
+  const { data, error } = await client
+    .from("fechamentos")
+    .select("*")
+    .gte("created_at", hoje + "T00:00:00")
+    .lte("created_at", hoje + "T23:59:59");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  let totalDinheiro = 0;
+  let totalPix = 0;
+  let totalCredito = 0;
+  let totalIfood = 0;
+  let totalRetiradas = 0;
+
+  data.forEach(item => {
+    totalDinheiro += Number(item.dinheiro || 0);
+    totalPix += Number(item.pix || 0);
+    totalCredito += Number(item.credito || 0);
+    totalIfood += Number(item.ifood || 0);
+    totalRetiradas += Number(item.retiradas || 0);
+  });
+
+  const totalGeral = totalDinheiro + totalPix + totalCredito + totalIfood;
+  const liquido = totalGeral - totalRetiradas;
+
+  document.getElementById("resumo").innerHTML = `
+    💵 Dinheiro: R$ ${totalDinheiro.toFixed(2)} <br>
+    📲 PIX: R$ ${totalPix.toFixed(2)} <br>
+    💳 Crédito: R$ ${totalCredito.toFixed(2)} <br>
+    🛵 iFood: R$ ${totalIfood.toFixed(2)} <br><br>
+    🧾 Total Geral: <b>R$ ${totalGeral.toFixed(2)}</b> <br>
+    ➖ Retiradas: R$ ${totalRetiradas.toFixed(2)} <br><br>
+    🔥 Lucro Líquido: <b>R$ ${liquido.toFixed(2)}</b>
+  `;
+}
+
+carregarResumo();
+
+</script>
 <script>
 
 // 🔑 CONEXÃO SUPABASE
