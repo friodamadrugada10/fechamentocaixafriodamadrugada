@@ -58,19 +58,24 @@ async function buscarRelatorio() {
   }
 
   const f = data[0];
+function formatar(valor) {
+  return Number(valor).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
+ document.getElementById("resultado").innerHTML = `
+💵 Dinheiro: ${formatar(f.dinheiro)} <br>
+📲 PIX: ${formatar(f.pix)} <br>
+💳 Débito: ${formatar(f.debito)} <br>
+💳 Crédito: ${formatar(f.credito)} <br>
+🛵 iFood: ${formatar(f.ifood)} <br><br>
 
-  document.getElementById("resultado").innerHTML = `
-    💵 Dinheiro: R$ ${f.dinheiro} <br>
-    📲 PIX: R$ ${f.pix} <br>
-    💳 Débito: R$ ${f.debito} <br>
-    💳 Crédito: R$ ${f.credito} <br>
-    🛵 iFood: R$ ${f.ifood} <br><br>
+📄 Total Vendas: ${formatar(f.total_vendas)} <br>
+➖ Retiradas: ${formatar(f.retiradas)} <br><br>
 
-    🧾 Total Vendas: R$ ${f.total_vendas} <br>
-    ➖ Retiradas: R$ ${f.retiradas} <br><br>
-
-    🔥 Caixa Final: R$ ${f.caixa_final}
-  `;
+🔥 Caixa Final: ${formatar(f.caixa_final)}
+`;
 }
 
 </script>
