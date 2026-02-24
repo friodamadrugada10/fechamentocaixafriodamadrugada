@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Relatório - Frio da Madrugada</title>
+</head>
+
+<body style="background:black;color:white;text-align:center;margin-top:60px;">
+
+<h1>📊 Relatório do Dia</h1>
+
+<input type="date" id="data"><br><br>
+
+<select id="turno">
+  <option value="Manhã">Manhã</option>
+  <option value="Tarde">Tarde</option>
+  <option value="Noite">Noite</option>
+</select><br><br>
+
+<button onclick="buscarRelatorio()">Buscar</button>
+<button onclick="window.print()">📄 Exportar PDF</button>
+
+<br><br>
+
+<div id="resultado"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const client = window.supabase.createClient(
+  "https://qzelobrvpitgvkuujwzi.supabase.co",
+  "https://qzelobrvpitgvkuujwzi.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZWxvYnJ2cGl0Z3ZrdXVqd3ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2Nzc0NjQsImV4cCI6MjA4NzI1MzQ2NH0.eS-CxNvPrx5SZ5KRqPCFGZhoCijJ9HzaqJ_mOA_gKvI"
+);
+
+document.getElementById("data").value =
+  new Date().toISOString().split("T")[0];
+
+async function buscarRelatorio() {
+
+  const dataSelecionada = document.getElementById("data").value;
+  const turnoSelecionado = document.getElementById("turno").value;
+
+  const { data, error } = await client
+    .from("fechamentos")
+    .select("*")
+    .eq("data", dataSelecionada)
+    .eq("turno", turnoSelecionado);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  if(data.length === 0){
+    document.getElementById("resultado").innerHTML =
+      "Nenhum fechamento encontrado.";
+    return;
+  }
+
+  const f = data[0];
+
+  document.getElementById("resultado").innerHTML = `
+    💵 Dinheiro: R$ ${f.dinheiro} <br>
+    📲 PIX: R$ ${f.pix} <br>
+    💳 Débito: R$ ${f.debito} <br>
+    💳 Crédito: R$ ${f.credito} <br>
+    🛵 iFood: R$ ${f.ifood} <br><br>
+
+    🧾 Total Vendas: R$ ${f.total_vendas} <br>
+    ➖ Retiradas: R$ ${f.retiradas} <br><br>
+
+    🔥 Caixa Final: R$ ${f.caixa_final}
+  `;
+}
+
+</script>
+
+</body>
+</html>
