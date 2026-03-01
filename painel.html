@@ -102,7 +102,7 @@ input:focus, select:focus{
   <input type="number" id="retiradas" placeholder="Retiradas"><br><br>
   <input type="number" id="caixa_final" placeholder="Caixa Final" step="0.01">
 <input type="number" id="diferenca" placeholder="Diferença (sobra ou falta)" step="0.01">
-
+  <div id="resumoFinal" style="margin-top:20px;font-weight:bold;"></div>
   <button id="salvarFechamento">Salvar Fechamento</button>
 </div>
 
@@ -121,7 +121,42 @@ const client = window.supabase.createClient(
 
 // 🔐 PROTEÇÃO + INICIALIZAÇÃO
 window.addEventListener("DOMContentLoaded", async () => {
+function atualizarResumo() {
 
+  const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
+  const pix = parseFloat(document.getElementById("pix").value) || 0;
+  const debito = parseFloat(document.getElementById("debito").value) || 0;
+  const credito = parseFloat(document.getElementById("credito").value) || 0;
+  const ifood = parseFloat(document.getElementById("ifood").value) || 0;
+  const retiradas = parseFloat(document.getElementById("retiradas").value) || 0;
+  const caixaFinal = parseFloat(document.getElementById("caixa_final").value) || 0;
+
+  const totalVendas = dinheiro + pix + debito + credito + ifood;
+  const previsto = totalVendas - retiradas;
+
+  const diferenca = caixaFinal - previsto;
+
+  const cor = diferenca < 0 ? "red" : "lime";
+
+  document.getElementById("resumoFinal").innerHTML = `
+    Total vendas: R$ ${totalVendas.toFixed(2)}<br>
+    Previsto em caixa: R$ ${previsto.toFixed(2)}<br>
+    <span style="color:${cor}">
+      🔥 Diferença: R$ ${diferenca.toFixed(2)}
+    </span>
+  `;
+}
+  [
+ "dinheiro",
+ "pix",
+ "debito",
+ "credito",
+ "ifood",
+ "retiradas",
+ "caixa_final"
+].forEach(id => {
+  document.getElementById(id).addEventListener("input", atualizarResumo);
+});
   // Data automática
   document.getElementById("data").value =
     new Date().toISOString().split("T")[0];
