@@ -5,6 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+  @media (max-height: 800px) {
+  input, select {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  #resumoFinal {
+    font-size: 13px;
+  }
+}
   * {
   box-sizing: border-box;
 }
@@ -123,28 +146,37 @@ const client = window.supabase.createClient(
 window.addEventListener("DOMContentLoaded", async () => {
  function atualizarResumo() {
 
-    const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
-    const pix = parseFloat(document.getElementById("pix").value) || 0;
-    const debito = parseFloat(document.getElementById("debito").value) || 0;
-    const credito = parseFloat(document.getElementById("credito").value) || 0;
-    const ifood = parseFloat(document.getElementById("ifood").value) || 0;
-    const retiradas = parseFloat(document.getElementById("retiradas").value) || 0;
-    const caixaFinal = parseFloat(document.getElementById("caixa_final").value) || 0;
+  const dinheiro = parseFloat(document.getElementById("dinheiro").value) || 0;
+  const pix = parseFloat(document.getElementById("pix").value) || 0;
+  const debito = parseFloat(document.getElementById("debito").value) || 0;
+  const credito = parseFloat(document.getElementById("credito").value) || 0;
+  const ifood = parseFloat(document.getElementById("ifood").value) || 0;
+  const retiradas = parseFloat(document.getElementById("retiradas").value) || 0;
+  const caixaFinal = parseFloat(document.getElementById("caixa_final").value) || 0;
 
-    const totalVendas = dinheiro + pix + debito + credito + ifood;
-    const previsto = totalVendas - retiradas;
-    const diferenca = caixaFinal - previsto;
+  const totalVendas = dinheiro + pix + debito + credito + ifood;
+  const previsto = totalVendas - retiradas;
+  const diferenca = caixaFinal - previsto;
 
-    const cor = diferenca < 0 ? "red" : "lime";
+  const cor = diferenca < 0 ? "red" : "lime";
 
-    document.getElementById("resumoFinal").innerHTML = `
-      Total vendas: R$ ${totalVendas.toFixed(2)}<br>
-      Previsto em caixa: R$ ${previsto.toFixed(2)}<br>
-      <span style="color:${cor}">
+  document.getElementById("resumoFinal").innerHTML = `
+    <div style="font-size:14px;line-height:22px">
+      💵 Dinheiro: R$ ${dinheiro.toFixed(2)} <br>
+      📲 Pix: R$ ${pix.toFixed(2)} <br>
+      💳 Débito: R$ ${debito.toFixed(2)} <br>
+      💳 Crédito: R$ ${credito.toFixed(2)} <br>
+      🛵 iFood: R$ ${ifood.toFixed(2)} <br>
+      ➖ Retiradas: R$ ${retiradas.toFixed(2)} 
+      <hr style="border:1px solid #333;margin:8px 0;">
+      💰 Total vendas: R$ ${totalVendas.toFixed(2)} <br>
+      📦 Previsto em caixa: R$ ${previsto.toFixed(2)} <br>
+      <span style="color:${cor};font-weight:bold;">
         🔥 Diferença: R$ ${diferenca.toFixed(2)}
       </span>
-    `;
-  }
+    </div>
+  `;
+}
 
   [
     "dinheiro",
