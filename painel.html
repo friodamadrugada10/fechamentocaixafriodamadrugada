@@ -5,6 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+  .resumo-fixo {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  padding: 15px;
+  border-top: 2px solid #ff7a00;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.6);
+  font-size: 13px;
+  z-index: 999;
+}
+
+.card {
+  padding-bottom: 200px; /* espaço para o resumo fixo */
+}
   @media (max-height: 800px) {
   input, select {
     padding: 10px;
@@ -125,7 +141,7 @@ input:focus, select:focus{
   <input type="number" id="retiradas" placeholder="Retiradas"><br><br>
   <input type="number" id="caixa_final" placeholder="Caixa Final" step="0.01">
 <input type="number" id="diferenca" placeholder="Diferença (sobra ou falta)" step="0.01">
-  <div id="resumoFinal" style="margin-top:20px;font-weight:bold;"></div>
+  <div id="resumoFinal" class="resumo-fixo"></div>
   <button id="salvarFechamento">Salvar Fechamento</button>
 </div>
 
