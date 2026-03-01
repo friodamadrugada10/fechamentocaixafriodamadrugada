@@ -5,24 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-  .resumo-fixo {
+  .btn-fixo {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #111;
-  padding: 15px;
-  border-top: 2px solid #ff7a00;
-  box-shadow: 0 -5px 20px rgba(0,0,0,0.6);
-  font-size: 13px;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 450px;
+  padding: 18px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(90deg,#ff7a00,#ff3c00);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
   z-index: 999;
 }
-  .resumo-fixo button {
-    margin-top: 10px;
-  }
 
 .card {
-  padding-bottom: 200px; /* espaço para o resumo fixo */
+  padding-bottom: 120px;
 }
   @media (max-height: 800px) {
   input, select {
@@ -137,18 +138,50 @@ input:focus, select:focus{
   </select>
 
   <input type="number" id="caixa_inicio" placeholder="Caixa Inicial"><br><br>
-  <input type="number" id="dinheiro" placeholder="Dinheiro"><br><br>
-  <input type="number" id="pix" placeholder="Pix"><br><br>
-  <input type="number" id="debito" placeholder="Débito"><br><br>
-  <input type="number" id="credito" placeholder="Crédito"><br><br>
-  <input type="number" id="ifood" placeholder="iFood"><br><br>
-  <input type="number" id="retiradas" placeholder="Retiradas"><br><br>
-  <input type="number" id="caixa_final" placeholder="Caixa Final" step="0.01">
-<input type="number" id="diferenca" placeholder="Diferença (sobra ou falta)" step="0.01">
-  <div id="resumoFinal" class="resumo-fixo">
-  <button id="salvarFechamento" class="btn-primary">
-    Salvar Fechamento
-  </button>
+ <div class="linha-campo">
+  <label>Dinheiro:</label>
+  <input type="number" id="dinheiro">
+</div>
+
+<div class="linha-campo">
+  <label>Pix:</label>
+  <input type="number" id="pix">
+</div>
+
+<div class="linha-campo">
+  <label>Débito:</label>
+  <input type="number" id="debito">
+</div>
+
+<div class="linha-campo">
+  <label>Crédito:</label>
+  <input type="number" id="credito">
+</div>
+
+<div class="linha-campo">
+  <label>iFood:</label>
+  <input type="number" id="ifood">
+</div>
+
+<div class="linha-campo">
+  <label>Retiradas:</label>
+  <input type="number" id="retiradas">
+</div>
+
+<div class="linha-campo">
+  <label>Caixa Final:</label>
+  <input type="number" id="caixa_final" step="0.01">
+</div>
+
+<div class="linha-campo">
+  <label>Diferença:</label>
+  <input type="number" id="diferenca" step="0.01">
+</div>
+ <div id="resumoFinal" style="margin-top:20px;"></div>
+  
+ <button id="salvarFechamento" class="btn-fixo">
+  Salvar Fechamento
+</button>
 </div>
 
 
