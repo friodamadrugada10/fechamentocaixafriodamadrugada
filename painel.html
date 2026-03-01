@@ -184,38 +184,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "index.html";
   });
 
-});
-
-  const hoje = new Date().toISOString().split('T')[0];
-
-  const { data, error } = await client
-    .from("fechamentos")
-    .select("*")
-    .gte("created_at", hoje + "T00:00:00")
-    .lte("created_at", hoje + "T23:59:59");
-
-  if (error) return;
-
-  let totalDinheiro = 0;
-  let totalPix = 0;
-  let totalCredito = 0;
-  let totalIfood = 0;
-  let totalRetiradas = 0;
-
-  data.forEach(item => {
-    totalDinheiro += Number(item.dinheiro || 0);
-    totalPix += Number(item.pix || 0);
-    totalCredito += Number(item.credito || 0);
-    totalIfood += Number(item.ifood || 0);
-    totalRetiradas += Number(item.retiradas || 0);
-  });
-
-  const totalGeral = totalDinheiro + totalPix + totalCredito + totalIfood;
-  const liquido = totalGeral - totalRetiradas;
-
-  
-}
-
 </script>
     </div>
   </div>
