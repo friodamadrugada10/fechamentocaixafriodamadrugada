@@ -17,6 +17,9 @@
   font-size: 13px;
   z-index: 999;
 }
+  .resumo-fixo button {
+    margin-top: 10px;
+  }
 
 .card {
   padding-bottom: 200px; /* espaço para o resumo fixo */
@@ -63,6 +66,7 @@ body{
 .card{
   background:#111;
   padding:25px;
+  padding-bottom:220px;
   border-radius:20px;
   box-shadow:0 0 40px rgba(255,120,0,0.2);
 }
@@ -141,8 +145,10 @@ input:focus, select:focus{
   <input type="number" id="retiradas" placeholder="Retiradas"><br><br>
   <input type="number" id="caixa_final" placeholder="Caixa Final" step="0.01">
 <input type="number" id="diferenca" placeholder="Diferença (sobra ou falta)" step="0.01">
-  <div id="resumoFinal" class="resumo-fixo"></div>
-  <button id="salvarFechamento">Salvar Fechamento</button>
+  <div id="resumoFinal" class="resumo-fixo">
+  <button id="salvarFechamento" class="btn-primary">
+    Salvar Fechamento
+  </button>
 </div>
 
 
